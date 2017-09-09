@@ -30,3 +30,19 @@ def create_lexicon(pos,neg):
     return l2
 
 
+def sample_handling(sample,lexicon,classification):
+    feature_sets = []
+    with open(sample, 'r') as f:
+        contents = f.readlines()
+        for l in contents[:hm_lines]:
+            current_words = word_tokenize(l.lower())
+            current_words = [lemmatizer.lemmatize(i) for i in current_words]
+            features = np.zeros(len(lexicon))
+            for word in current_words:
+                if word.lower() in lexicon:
+                    index_value = lexicon.index(word.lower())
+                    features[index_value] += 1
+            features = list(features)
+            feature_sets.append([features,classification])
+    return feature_sets
+
